@@ -8,7 +8,7 @@ import os
 from savedropbox_config import savedropboxconfig
 from keep_alive import keep_alive
 import json
-
+import emoji
 load_dotenv()
 
 
@@ -21,26 +21,27 @@ bot = commands.Bot(command_prefix="+", intents=intents,help_command=None)
 
 help_cmd_page={
 
-    "Moderation":{"owner <pseudo> ":"Permet d'avoir l'accès au bot",
-                  "ownerlist":"Permet d'afficher la liste des propriétaires du bot",
-                  "unowner <pseudo>":" Permet de retirer les permissions de propriétaire à un utilisateur",
+    "Moderation":{"admin <pseudo> ":"Permet d'avoir l'accès au bot",
+                  "adminlist":"Permet d'afficher la liste des propriétaires du bot",
+                  "unadmin <pseudo>":" Permet de retirer les permissions de propriétaire à un utilisateur",
                   "ban <pseudo>":" Permet de bannir un utilisateur",
                   "unban <id>":" Permet de débannir un utilisateur",
                   "banlist":"Permet d'afficher la liste des utilisateurs bannis",
                   "derank <pseudo,role>":"Permet de retirer un role à un utilisateur",
                   "addrole <pseudo,role>":"Permet d'ajouter un role à un utilisateur",
-
+                  "giveowner <pseudo>": "Permet de transferrer la propriété du bot à un administrateur",
                   },
     "Gestion du serveur":{"lock":" Permet de verouiller un salon textuel",
                          "unlock":"Permet de déverouiller un salon textuel",
                          "autoreact add <emoji>":"Permet d'ajouter une réaction automatique à un salon",
+                         "autoreact del <emoji>":"Permet de retirer une réaction automatique à un salon",
                          "massiverole <role>":"Permet d'ajouter un role à tous les membres du serveur",
                          "autorole <role>":"Ajoute automatiquement le role aux nouveaux arrivants",
                          "set joinchannel <salon>":"Permet de définir le salon de bienvenue",
                          "renew":"Permet de supprimer et remettre un salon",
                          "clear <nombre>":"Permet de supprimer un certain nombre de messages",
                          "set botname <nom>":"Permet de changer le nom du bot",
-                          "set theme <couleur hex>":"Permet de changer la couleur du bot",
+                         "set theme <couleur hex>":"Permet de changer la couleur du bot",
     },
     "Ticket":{"ticket_init":"Permet d'initialiser la création de ticket (executer dans le salon ticket)",
               "close":"Permet de fermer un ticket",
@@ -92,11 +93,13 @@ async def on_guild_join(guild):
         "antilink":False,
         "autoreact":{},
         "ticket":{"channel":None,"categories":{}},
-        "logs":{}
-
+        "logs":{},
+        "theme":"ff0000"
  }
     save_config()
     await guild.system_channel.send("Utiliser +setup pour configurer le bot")
+
+
 
 
 def get_admin_list(guild):
@@ -105,6 +108,7 @@ def get_admin_list(guild):
 
 def get_owner(guild):
     return config["guilds"][str(guild.id)]["owner_id"]
+
 
 
 
@@ -152,7 +156,12 @@ async def help(ctx):
       view=PageView(embeds)
       await ctx.send(embed=embeds[0],view=view)
    
-
+@bot.command()
+async def giveowner(ctx,member):
+   if ctx.author.id ==get_owner(ctx.guild) and member.id in get_admin_list(ctx.guild):
+      config["guilds"][str(ctx.guild.id)]["owner_id"]=member.id
+      save_config()
+      await ctx.send(f'{member.mention} est maintenant le propriétaire du bot !')
 
 @bot.command()
 async def autorole(ctx,role:discord.Role):
@@ -177,35 +186,35 @@ async def massiverole(ctx,role:discord.Role):
 
 
 @bot.command()
-async def owner(ctx,member):
+async def admin(ctx,member):
     user_id = int(member.strip("<@!>"))
     if ctx.author.id==get_owner(ctx.guild) and user_id not in get_admin_list(ctx.guild):
       config["guilds"][str(ctx.guild.id)]["admin_list"].append(user_id)
       save_config()
-      await ctx.send(f'{member} est maintenant un propriétaire du bot !')
+      await ctx.send(f'{member} est maintenant un administrateur du bot !')
     else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
 @bot.command()
-async def unowner(ctx,member):
+async def unadmin(ctx,member):
     user_id = int(member.strip("<@!>"))
     if ctx.author.id==get_owner(ctx.guild) and user_id in get_admin_list(ctx.guild):
           config["guilds"][str(ctx.guild.id)]["admin_list"].remove(user_id)
           save_config()
 
-          await ctx.send(f'{member} n\'est plus un propriétaire du bot !')
+          await ctx.send(f'{member} n\'est plus un administrateur du bot !')
     else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
 @bot.command()
-async def ownerlist(ctx):
+async def adminlist(ctx):
       admin_list=get_admin_list(ctx.guild)
       if ctx.author.id in admin_list:
         txt=""
         for admin in admin_list:
             txt+=f'● <@{admin}>\n'
         embed = discord.Embed(
-          title='Liste des propriétaires',
+          title='Liste des administrateurs',
           description=txt,
           color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
       )
@@ -224,8 +233,8 @@ async def clear(ctx,limit=1):
 
 @bot.command()
 async def ban(ctx,member:discord.Member,reason=None):
-  owner_list=get_admin_list(ctx.guild)
-  if ctx.author.id in owner_list and member.id not in owner_list and member.id!=ctx.author.id:
+  admin_list=get_admin_list(ctx.guild)
+  if ctx.author.id in admin_list and member.id not in admin_list and member.id!=ctx.author.id:
      await member.ban(reason=reason)
      await ctx.send(f'{member.mention} a été **banni**')
   else:
@@ -360,23 +369,28 @@ async def on_message(message):
 
 
 @bot.command()
-async def autoreact(ctx,status,channel:discord.TextChannel,emoji:str):
+async def autoreact(ctx,status,channel:discord.TextChannel,emoj:str):
    if ctx.author.id in get_admin_list(ctx.guild):
-      if status.lower()=="add":
-         if str(channel.id) not in config["guilds"][str(ctx.guild.id)]["autoreact"].keys():
       
-            config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]=[emoji]
-         else:
-            if emoji not in config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]:
-              config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)].append(emoji)  
+      if emoj in emoji.EMOJI_DATA:
+          emoji=emoj
+          if status.lower()=="add":
+            if str(channel.id) not in config["guilds"][str(ctx.guild.id)]["autoreact"].keys():
           
-         await ctx.send(f"Réaction automatique activée pour le salon {channel.mention} avec l'emoji {emoji}")
-      elif status.lower()=="del":
-          if config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]:
-              if emoji in config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]:
-                config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)].remove(emoji)
-                await ctx.send(f"Réaction automatique désactivée pour le salon {channel.mention} avec l'emoji {emoji}")
-      save_config()
+                config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]=[emoji]
+            else:
+                if emoji not in config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]:
+                  config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)].append(emoji)  
+              
+            await ctx.send(f"Réaction automatique activée pour le salon {channel.mention} avec l'emoji {emoji}")
+          elif status.lower()=="del":
+              if config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]:
+                  if emoji in config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)]:
+                    config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)].remove(emoji)
+                    await ctx.send(f"Réaction automatique désactivée pour le salon {channel.mention} avec l'emoji {emoji}")
+          save_config()
+      else:
+          await ctx.send("Veuillez entrer un emoji valide")
    else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
