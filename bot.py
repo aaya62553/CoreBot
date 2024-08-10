@@ -5,10 +5,13 @@ import asyncio
 import re
 from dotenv import load_dotenv 
 import os
-from save_config import save_config
+from savedropbox_config import savedropboxconfig
 from keep_alive import keep_alive
 import json
+
 load_dotenv()
+
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -69,6 +72,7 @@ config=load_config()
 def save_config():
   with open("config.json","w") as f:
      json.dump(config,f,indent=4)
+  savedropboxconfig()
 
 
 
@@ -669,9 +673,9 @@ async def recreate_ticket_view():
 
 invites_cache = {}
 
-@tasks.loop(minutes=20)
+@tasks.loop(hours=1)
 async def update_config():
-   save_config()
+   savedropboxconfig()
 
 @bot.event
 async def on_ready():
