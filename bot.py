@@ -111,7 +111,7 @@ def get_owner(guild):
 
 
 
-def generate_help_embeds():
+def generate_help_embeds(guild):
    embeds=[]
    for title in help_cmd_page:
       txt=""
@@ -120,7 +120,7 @@ def generate_help_embeds():
       embed = discord.Embed(
             title=title,
             description=txt,
-            #color=discord.Color.red()
+            color=int(config["guilds"][str(guild.id)]["theme"],16)
         )
       embeds.append(embed)
    return embeds
@@ -150,7 +150,7 @@ class PageView(View):
          
 @bot.command()
 async def help(ctx):
-      embeds=generate_help_embeds()
+      embeds=generate_help_embeds(ctx.guild)
       view=PageView(embeds)
       await ctx.send(embed=embeds[0],view=view)
    
@@ -214,7 +214,7 @@ async def adminlist(ctx):
         embed = discord.Embed(
           title='Liste des administrateurs',
           description=txt,
-          #color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+          color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
       )
         await ctx.send(embed=embed)
       else:
@@ -263,7 +263,7 @@ async def banlist(ctx):
       embed = discord.Embed(
           title='Liste des bannis',
           description=txt,
-          #color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+          color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
       )
       await ctx.send(embed=embed)
 
@@ -352,7 +352,7 @@ async def on_message(message):
           embed=discord.Embed(
               title="Boost",
               description=f"{message.author.mention} a boosté le serveur !",
-              #color=int(config["guilds"][str(message.guild.id)]["theme"],16)
+              color=int(config["guilds"][str(message.guild.id)]["theme"],16)
           )
           await channel.send(embed=embed)
    if message.mention_everyone:
@@ -361,7 +361,7 @@ async def on_message(message):
           embed=discord.Embed(
               title="Mention everyone",
               description=f"{message.author.mention} a mentionné everyone !",
-              #color=int(config["guilds"][str(message.guild.id)]["theme"],16)
+              color=int(config["guilds"][str(message.guild.id)]["theme"],16)
               )
           await channel.send(embed=embed)
    await bot.process_commands(message)
@@ -411,10 +411,11 @@ async def antilink(ctx,status):
 async def on_member_join(member:discord.Member):
    if config["guilds"][str(member.guild.id)]["welcome_channel"]:
       embed=discord.Embed(
-          title="Bienvenue sur **{member.guild}** {member.mention} !",
-          #color=int(config["guilds"][str(member.guild.id)]["theme"],16)
+          title="Bienvenue !",
+          description=f"👋 Bienvenue {member.mention} sur le serveur {member.guild.name} !",
+          color=int(config["guilds"][str(member.guild.id)]["theme"],16)
       )
-      await bot.get_channel(config["guilds"][str(member.guild.id)]["welcome_channel"]).send(f"{member.mention} a rejoint **{member.guild}** !")
+      await bot.get_channel(config["guilds"][str(member.guild.id)]["welcome_channel"]).send(embed=embed)
    role_id=config["guilds"][str(member.guild.id)]["autorole"]
    role=discord.utils.get(member.guild.roles,id=role_id)
    if role:
@@ -429,7 +430,7 @@ async def on_member_join(member:discord.Member):
                   embed=discord.Embed(
                   title="Bot ajouté",
                   description=f"Le bot {member.mention} a été ajouté par {entry.user.mention} !",
-                  #color=int(config["guilds"][str(member.guild.id)]["theme"],16)
+                  color=int(config["guilds"][str(member.guild.id)]["theme"],16)
                 )
                   await channel.send(embed=embed)
               if entry.user.id not in get_admin_list(member.guild) and config["guilds"][str(member.guild.id)]["antiraid"]:
@@ -529,7 +530,7 @@ async def list(ctx,param1:str):
           embed = discord.Embed(
             title='Liste des catégories de tickets',
             description=txt,
-            #color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+            color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
             )
           await ctx.send(embed=embed)
         
@@ -647,7 +648,7 @@ async def create_ticket_channel(interaction,category,submit=None):
             description = "\n".join([f"**{q} :**\n\n {a}\n" for q, a in submit.items()])
             embed = discord.Embed(title=f"Ticket de {member.name}", 
                                   description=description, 
-                                  #color=int(config["guilds"][str(guild.id)]["theme"],16)
+                                  color=int(config["guilds"][str(guild.id)]["theme"],16)
                                   )
             embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
             await ticket_channel.send(embed=embed)
@@ -688,7 +689,7 @@ async def recreate_ticket_view():
           embed = discord.Embed(
               title='Ticket System',
               description='Veuillez sélectionner une catégorie pour ouvrir votre ticket dans le menu déroulant ci-dessous.',
-              #color=int(config["guilds"][str(guild.id)]["theme"],16)
+              color=int(config["guilds"][str(guild.id)]["theme"],16)
           )
           embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
           embed.set_footer(text='CoreBot Ticket')
@@ -716,7 +717,7 @@ async def ticket_init(ctx):
       embed = discord.Embed(
           title='Ticket System',
           description='Veuillez sélectionner une catégorie pour ouvrir votre ticket dans le menu déroulant ci-dessous.',
-          #color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+          color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
       )
       embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
       embed.set_footer(text='CoreBot Ticket')
@@ -788,4 +789,4 @@ async def antiraid(ctx,arg1):
 
 
 keep_alive()
-bot.run(os.getenv("discord_TOKEN"))
+bot.run("Nzc1NjA1NTUzNzYxMDkxNjI0.GpGWff.ZJzAZlpW8UozVOA97fb1kYgsENpH4GGqKDX1q4")
