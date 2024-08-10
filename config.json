@@ -1,37 +1,56 @@
 {
-  "guilds": {
-    "994268877011832893": {
-      "owner_id": 481147774004625418,
-      "admin_list": [
-        481147774004625418, 1271132555957239913, 852699091040337991
-      ],
-      "autorole": 1271374832574922752,
-      "welcome_channel": 1271421365051850784,
-      "antilink": true,
-      "autoreact": {
-        "1271421365051850784": [],
-        "1271512970089861143": ["\ud83e\uddf7"]
-      },
-      "ticket": {
-        "channel": 1271512970089861143,
-        "categories": {
-          "Ticket": {
-            "description": "Cliquez ici pour ouvrir un nouveau ticket",
-            "emoji": "",
-            "form": {
-              "test": "test"
-            }
-          }
+    "guilds": {
+        "994268877011832893": {
+            "owner_id": 481147774004625418,
+            "admin_list": [
+                481147774004625418,
+                1271132555957239913,
+                852699091040337991
+            ],
+            "autorole": 1271374832574922752,
+            "welcome_channel": 1271421365051850784,
+            "antilink": true,
+            "autoreact": {
+                "1271421365051850784": [],
+                "1271512970089861143": [
+                    "\ud83e\uddf7"
+                ]
+            },
+            "ticket": {
+                "channel": 1271512970089861143,
+                "categories": {
+                    "Ticket": {
+                        "description": "Cliquez ici pour ouvrir un nouveau ticket",
+                        "emoji": "",
+                        "form": {
+                            "test": "test"
+                        }
+                    }
+                },
+                "role": 1271403857947398237
+            },
+            "logs": {
+                "raidlog": 1271421365051850784,
+                "boostlog": 1271421365051850784
+            },
+            "botname": "BOT",
+            "theme": "39372",
+            "antiraid": true
         },
-        "role": 1271403857947398237
-      },
-      "logs": {
-        "raidlog": 1271421365051850784,
-        "boostlog": 1271421365051850784
-      },
-      "botname": "BOT",
-      "theme": "39372",
-      "antiraid": true
+        "947901267219472426": {
+            "owner_id": 481147774004625418,
+            "admin_list": [
+                481147774004625418
+            ],
+            "autorole": null,
+            "welcome_channel": null,
+            "antilink": false,
+            "autoreact": {},
+            "ticket": {
+                "channel": null,
+                "categories": {}
+            },
+            "logs": {}
+        }
     }
-  }
 }

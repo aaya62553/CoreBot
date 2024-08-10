@@ -6,7 +6,7 @@ import re
 from dotenv import load_dotenv 
 import os
 from save_config import save_config
-# from keep_alive import keep_alive
+from keep_alive import keep_alive
 import json
 load_dotenv()
 
@@ -757,5 +757,5 @@ async def antiraid(ctx,arg1):
         await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
 
-# keep_alive()
+keep_alive()
 bot.run(os.getenv("discord_TOKEN"))
