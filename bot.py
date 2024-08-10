@@ -59,7 +59,7 @@ help_cmd_page={
             "raidlog off":"Permet de désactiver les logs de raid",
             "antilink <on/off>":"Permet d'activer/désactiver l'envoi de lien",
             "antiraid <on/off>":"Permet de kick les utilisateurs ajoutant un bot sans autorisation",
-
+            "set status <status>":"Permet de définir le status du bot",
     },
 
 }
@@ -329,6 +329,8 @@ url_pattern = re.compile(r'https?://\S+|www\.\S+|discord\.gg/\S+')
 async def on_message(message):
    if message.author==bot.user:
       return
+   if bot.user.mention in message.content:
+        await message.channel.send('Mon préfixe est **+**, utilisez +help pour voir les commandes disponibles')
    if config["guilds"][str(message.guild.id)]["antilink"] and url_pattern.search(message.content) and message.author.id not in get_admin_list(message.guild):
       await message.delete()
       warning =await message.channel.send(f"{message.author.mention} Vous n'êtes pas autorisé à envoyer des liens ici !")
@@ -454,6 +456,10 @@ async def set(ctx,param1:str,param2):
              await ctx.send(f"Le thème du serveur a été défini sur **{param2}**")
           except :
               await ctx.send("Veuillez entrer une couleur hexadécimale valide")
+      elif param1=="status":
+          await bot.change_presence(activity=discord.Game(name=param2))
+          config["guilds"][str(ctx.guild.id)]["status"]=param2
+          await ctx.send(f"Le status du bot a été défini sur **{param2}**")
             
       save_config()
    else:
@@ -668,7 +674,7 @@ async def recreate_ticket_view():
               color=int(config["guilds"][str(guild.id)]["theme"],16)
           )
           embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
-          embed.set_footer(text='Sigma Ticket')
+          embed.set_footer(text='CoreBot Ticket')
           await ticket_channel.send(embed=embed,view=TicketView(guild))
 
 invites_cache = {}
@@ -681,8 +687,11 @@ async def update_config():
 async def on_ready():
     update_config.start()
     recreate_ticket_view.start()
-    await bot.change_presence(activity=discord.Game(name="discord.gg/sigmafac"))
-
+    for guild in bot.guilds:
+        if "status" in config["guilds"][str(guild.id)].keys():
+          await bot.change_presence(activity=discord.Game(name=config["guilds"][str(guild.id)]["status"]))
+        else:
+          await bot.change_presence(activity=discord.Game(name="CoreBot"))
 @bot.command()
 async def ticket_init(ctx):
     if ctx.author.id in get_admin_list(ctx.guild):
@@ -693,7 +702,7 @@ async def ticket_init(ctx):
           color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
       )
       embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
-      embed.set_footer(text='Sigma Ticket')
+      embed.set_footer(text='CoreBot Ticket')
       await ctx.send(embed=embed, view=TicketView(ctx.guild))
     else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
