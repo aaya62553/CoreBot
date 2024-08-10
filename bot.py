@@ -789,4 +789,4 @@ async def antiraid(ctx,arg1):
 
 
 keep_alive()
-bot.run("Nzc1NjA1NTUzNzYxMDkxNjI0.GpGWff.ZJzAZlpW8UozVOA97fb1kYgsENpH4GGqKDX1q4")
+bot.run(os.getenv("discord_TOKEN"))
