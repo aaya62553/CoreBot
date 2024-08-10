@@ -370,7 +370,7 @@ async def on_message(message):
 async def autoreact(ctx,status,channel:discord.TextChannel,emoji:str):
    if ctx.author.id in get_admin_list(ctx.guild):
       
-      if emoji.startswith("\u"):
+      # if emoji.startswith("\u"):
           if status.lower()=="add":
             if str(channel.id) not in config["guilds"][str(ctx.guild.id)]["autoreact"].keys():
           
@@ -386,8 +386,8 @@ async def autoreact(ctx,status,channel:discord.TextChannel,emoji:str):
                     config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)].remove(emoji)
                     await ctx.send(f"Réaction automatique désactivée pour le salon {channel.mention} avec l'emoji {emoji}")
           save_config()
-      else:
-          await ctx.send("Veuillez entrer un emoji valide")
+      # else:
+      #     await ctx.send("Veuillez entrer un emoji valide")
    else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
