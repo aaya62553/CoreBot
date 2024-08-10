@@ -55,17 +55,19 @@
         "1271419577594679318": {
             "owner_id": 481147774004625418,
             "admin_list": [
-                481147774004625418
+                481147774004625418,
+                1271132555957239913
             ],
-            "autorole": null,
-            "welcome_channel": null,
+            "autorole": 1271419577624166496,
+            "welcome_channel": 1271419578806964336,
             "antilink": false,
             "autoreact": {},
             "ticket": {
-                "channel": null,
+                "channel": 1271419578609696799,
                 "categories": {}
             },
-            "logs": {}
+            "logs": {},
+            "theme": "000000"
         }
     }
 }
