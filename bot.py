@@ -8,7 +8,6 @@ import os
 from savedropbox_config import savedropboxconfig
 from keep_alive import keep_alive
 import json
-import emoji
 load_dotenv()
 
 
@@ -151,7 +150,6 @@ class PageView(View):
          
 @bot.command()
 async def help(ctx):
-   if ctx.author.id in get_admin_list(ctx.guild):
       embeds=generate_help_embeds()
       view=PageView(embeds)
       await ctx.send(embed=embeds[0],view=view)
@@ -369,11 +367,10 @@ async def on_message(message):
 
 
 @bot.command()
-async def autoreact(ctx,status,channel:discord.TextChannel,emoj:str):
+async def autoreact(ctx,status,channel:discord.TextChannel,emoji:str):
    if ctx.author.id in get_admin_list(ctx.guild):
       
-      if emoj in emoji.EMOJI_DATA:
-          emoji=emoj
+      if emoji.startswith("\u"):
           if status.lower()=="add":
             if str(channel.id) not in config["guilds"][str(ctx.guild.id)]["autoreact"].keys():
           
@@ -412,6 +409,10 @@ async def antilink(ctx,status):
 @bot.event
 async def on_member_join(member:discord.Member):
    if config["guilds"][str(member.guild.id)]["welcome_channel"]:
+      embed=discord.Embed(
+          title="Bienvenue sur **{member.guild}** {member.mention} !",
+          color=int(config["guilds"][str(member.guild.id)]["theme"],16)
+      )
       await bot.get_channel(config["guilds"][str(member.guild.id)]["welcome_channel"]).send(f"{member.mention} a rejoint **{member.guild}** !")
    role_id=config["guilds"][str(member.guild.id)]["autorole"]
    role=discord.utils.get(member.guild.roles,id=role_id)
