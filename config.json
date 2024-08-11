@@ -31,11 +31,12 @@
                         "emoji": ""
                     }
                 },
-                "role": 1271403857947398237
+                "role": 1271410157234163823
             },
             "logs": {
                 "raidlog": 1271421365051850784,
-                "boostlog": 1271421365051850784
+                "boostlog": 1271421365051850784,
+                "msglog": 1271424938934538251
             },
             "botname": "BOT",
             "theme": "fffff",
@@ -66,10 +67,11 @@
             ],
             "autorole": 1271419577624166496,
             "welcome_channel": 1271419578806964336,
-            "antilink": false,
+            "antilink": true,
             "autoreact": {
                 "1271857028305915904": [
-                    "\u2705"
+                    "\u2705",
+                    "\u274c"
                 ]
             },
             "ticket": {
@@ -86,14 +88,46 @@
                         "description": "Cliquez ici pour ouvrir une demande d'achat",
                         "emoji": "\ud83d\udcb8"
                     }
-                }
+                },
+                "role": 1271847090858758176
             },
             "logs": {
                 "raidlog": 1271419578290798634,
                 "boostlog": 1271419578290798634
             },
             "theme": "0071ff"
+        },
+        "1219116198080417792": {
+            "owner_id": 1200501386144649392,
+            "admin_list": [
+                481147774004625418,
+                1200501386144649392
+            ],
+            "autorole": null,
+            "welcome_channel": null,
+            "antilink": false,
+            "autoreact": {},
+            "ticket": {
+                "channel": 1264560524381786215,
+                "categories": {
+                    "Giveaway": {
+                        "description": "Cliquez ici pour ouvrir une demande de giveaway",
+                        "emoji": "\ud83c\udf81"
+                    },
+                    "Recrutement": {
+                        "description": "Cliquez ici pour ouvrir une demande de recrutement",
+                        "emoji": "\u2694\ufe0f"
+                    },
+                    "Autre": {
+                        "description": "Cliquez ici pour ouvrir un ticket normal",
+                        "emoji": "\ud83d\udcc2"
+                    }
+                },
+                "role": 1219780677558472734
+            },
+            "logs": {},
+            "theme": "ff0000"
         }
     },
-    "dropbox_token": "sl.B6wH3wp28B0TegdvZX995WlkHioX4dOb7ijvS3-vrx-Q4Y150TppUgXfIGaPiAeQ-r1nfTUtukfpHWOpkR1uBgIt07W0-DFDhXa5tW4s1kQiTCRuRO-PdxsYJT-MoFCnFC1IniWiLsQk"
+    "dropbox_token": "sl.B6wsHtreXdSMPvmSZApAvU-8nag7qQ6etUK6G5AL3PPWMgBV_vCkQFpOEWGmSs-AD3wECe_EjT_UfVdz0OpqlTitA11RFdIPxmJlwBfRR0_4z6O03Nq_e5bQqaWu-wQT-ibt0MP6zBnk"
 }
