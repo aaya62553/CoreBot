@@ -32,8 +32,8 @@ help_cmd_page={
                   },
     "Gestion du serveur":{"lock":" Permet de verouiller un salon textuel",
                          "unlock":"Permet de déverouiller un salon textuel",
-                         "autoreact add <emoji>":"Permet d'ajouter une réaction automatique à un salon",
-                         "autoreact del <emoji>":"Permet de retirer une réaction automatique à un salon",
+                         "autoreact add <salon,emoji>":"Permet d'ajouter une réaction automatique à un salon",
+                         "autoreact del <salon,emoji>":"Permet de retirer une réaction automatique à un salon",
                          "massiverole <role>":"Permet d'ajouter un role à tous les membres du serveur",
                          "autorole <role>":"Ajoute automatiquement le role aux nouveaux arrivants",
                          "set joinchannel <salon>":"Permet de définir le salon de bienvenue",
@@ -155,11 +155,13 @@ async def help(ctx):
       await ctx.send(embed=embeds[0],view=view)
    
 @bot.command()
-async def giveowner(ctx,member):
+async def giveowner(ctx,member:discord.Member):
    if ctx.author.id ==get_owner(ctx.guild) and member.id in get_admin_list(ctx.guild):
       config["guilds"][str(ctx.guild.id)]["owner_id"]=member.id
       save_config()
       await ctx.send(f'{member.mention} est maintenant le propriétaire du bot !')
+   else:
+      await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
 @bot.command()
 async def autorole(ctx,role:discord.Role):

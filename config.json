@@ -1,82 +1,99 @@
 {
-  "guilds": {
-    "994268877011832893": {
-      "owner_id": 481147774004625418,
-      "admin_list": [
-        481147774004625418, 1271132555957239913, 852699091040337991
-      ],
-      "autorole": 1271374832574922752,
-      "welcome_channel": 1271421365051850784,
-      "antilink": true,
-      "autoreact": {
-        "1271421365051850784": [],
-        "1271512970089861143": ["\ud83e\uddf7"]
-      },
-      "ticket": {
-        "channel": 1271512970089861143,
-        "categories": {
-          "Ticket": {
-            "description": "Cliquez ici pour ouvrir un nouveau ticket",
-            "emoji": "",
-            "form": {
-              "test": "test"
-            }
-          }
+    "guilds": {
+        "994268877011832893": {
+            "owner_id": 481147774004625418,
+            "admin_list": [
+                481147774004625418,
+                1271132555957239913,
+                852699091040337991
+            ],
+            "autorole": 1271374832574922752,
+            "welcome_channel": 1271421365051850784,
+            "antilink": true,
+            "autoreact": {
+                "1271421365051850784": [],
+                "1271512970089861143": [
+                    "\ud83e\uddf7"
+                ]
+            },
+            "ticket": {
+                "channel": 1271512970089861143,
+                "categories": {
+                    "Ticket": {
+                        "description": "Cliquez ici pour ouvrir un nouveau ticket",
+                        "emoji": "",
+                        "form": {
+                            "test": "test"
+                        }
+                    },
+                    "Test": {
+                        "description": "Cliquez ici pour ouvrir un ticket",
+                        "emoji": ""
+                    }
+                },
+                "role": 1271403857947398237
+            },
+            "logs": {
+                "raidlog": 1271421365051850784,
+                "boostlog": 1271421365051850784
+            },
+            "botname": "BOT",
+            "theme": "fffff",
+            "antiraid": true,
+            "status": "tets"
         },
-        "role": 1271403857947398237
-      },
-      "logs": {
-        "raidlog": 1271421365051850784,
-        "boostlog": 1271421365051850784
-      },
-      "botname": "BOT",
-      "theme": "39372",
-      "antiraid": true
-    },
-    "947901267219472426": {
-      "owner_id": 481147774004625418,
-      "admin_list": [481147774004625418],
-      "autorole": null,
-      "welcome_channel": null,
-      "antilink": false,
-      "autoreact": {},
-      "ticket": {
-        "channel": null,
-        "categories": {}
-      },
-      "logs": {}
-    },
-    "1271419577594679318": {
-      "owner_id": 481147774004625418,
-      "admin_list": [
-        481147774004625418, 1271132555957239913, 852699091040337991
-      ],
-      "autorole": 1271419577624166496,
-      "welcome_channel": 1271419578806964336,
-      "antilink": false,
-      "autoreact": {},
-      "ticket": {
-        "channel": 1271419578609696799,
-        "categories": {
-          "Renseignement": {
-            "description": "Cliquez ici pour ouvrir un ticket de renseignement",
-            "emoji": "\ud83d\udd0e",
-            "form": {
-              "\ud83d\udd0ePosez votre question ici !": "Posez votre question ici..."
-            }
-          },
-          "Achat": {
-            "description": "Cliquez ici pour ouvrir une demande d'achat",
-            "emoji": "\ud83d\udcb8"
-          }
+        "947901267219472426": {
+            "owner_id": 481147774004625418,
+            "admin_list": [
+                481147774004625418
+            ],
+            "autorole": null,
+            "welcome_channel": null,
+            "antilink": false,
+            "autoreact": {},
+            "ticket": {
+                "channel": null,
+                "categories": {}
+            },
+            "logs": {}
+        },
+        "1271419577594679318": {
+            "owner_id": 481147774004625418,
+            "admin_list": [
+                481147774004625418,
+                1271132555957239913,
+                852699091040337991
+            ],
+            "autorole": 1271419577624166496,
+            "welcome_channel": 1271419578806964336,
+            "antilink": false,
+            "autoreact": {
+                "1271857028305915904": [
+                    "\u2705"
+                ]
+            },
+            "ticket": {
+                "channel": 1271419578609696799,
+                "categories": {
+                    "Renseignement": {
+                        "description": "Cliquez ici pour ouvrir un ticket de renseignement",
+                        "emoji": "\ud83d\udd0e",
+                        "form": {
+                            "\ud83d\udd0ePosez votre question ici !": "Posez votre question ici..."
+                        }
+                    },
+                    "Achat": {
+                        "description": "Cliquez ici pour ouvrir une demande d'achat",
+                        "emoji": "\ud83d\udcb8"
+                    }
+                }
+            },
+            "logs": {
+                "raidlog": 1271419578290798634,
+                "boostlog": 1271419578290798634
+            },
+            "theme": "0071ff"
         }
-      },
-      "logs": {
-        "raidlog": 1271419578290798634,
-        "boostlog": 1271419578290798634
-      },
-      "theme": "0071ff"
-    }
-  },
-  "dropbox_token": "sl.B6xrX43WwdMfkyoloFqVZVN4U_TmktRfyCnuxsh6I9wGD_IubyZR5MdrLjbPNCqkWWHMdze3YJ3ZNd2KN3CPqZbeRsUeLN6JUQ812pshe-sxyR_IM8aXCfrk1_PmF0RLnnXPjPspvwZ_"
+    },
+    "dropbox_token": "sl.B6wH3wp28B0TegdvZX995WlkHioX4dOb7ijvS3-vrx-Q4Y150TppUgXfIGaPiAeQ-r1nfTUtukfpHWOpkR1uBgIt07W0-DFDhXa5tW4s1kQiTCRuRO-PdxsYJT-MoFCnFC1IniWiLsQk"
 }
