@@ -5,7 +5,7 @@ import asyncio
 import re
 from dotenv import load_dotenv 
 import os
-from savedropbox_config import savedropboxconfig
+from savedropbox_config import savedropboxconfig,refresh_access_token
 from keep_alive import keep_alive
 import json
 load_dotenv()
@@ -697,10 +697,11 @@ async def recreate_ticket_view():
 
 invites_cache = {}
 
-@tasks.loop(hours=1)
+@tasks.loop(hours=3)
 async def update_config():
-   savedropboxconfig()
-
+   new_droptoken=refresh_access_token(os.getenv("refresh_token"),os.getenv("APP_KEY"),os.getenv("APP_SECRET"))
+   config['dropbox_token']=new_droptoken
+   save_config()
 @bot.event
 async def on_ready():
     update_config.start()
