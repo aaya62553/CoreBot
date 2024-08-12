@@ -25,13 +25,16 @@ help_cmd_page={
                   "unadmin <pseudo>":" Permet de retirer les permissions de propriétaire à un utilisateur",
                   "ban <pseudo>":" Permet de bannir un utilisateur",
                   "unban <id>":" Permet de débannir un utilisateur",
+                  "kick <pseudo>":"Permet de kick un utilisateur",
                   "banlist":"Permet d'afficher la liste des utilisateurs bannis",
                   "derank <pseudo,role>":"Permet de retirer un role à un utilisateur",
                   "addrole <pseudo,role>":"Permet d'ajouter un role à un utilisateur",
                   "giveowner <pseudo>": "Permet de transferrer la propriété du bot à un administrateur",
+                  "clear <nombre>":"Permet de supprimer un certain nombre de messages",
+                  "lock":"Permet de verouiller un salon textuel",
+                  "unlock":"Permet de déverouiller un salon textuel",
                   },
-    "Gestion du serveur":{"lock":" Permet de verouiller un salon textuel",
-                         "unlock":"Permet de déverouiller un salon textuel",
+    "Gestion du serveur":{
                          "autoreact add <salon,emoji>":"Permet d'ajouter une réaction automatique à un salon",
                          "autoreact del <salon,emoji>":"Permet de retirer une réaction automatique à un salon",
                          "list autoreact":"Permet d'afficher la liste des salons avec réactions automatiques",
@@ -39,13 +42,13 @@ help_cmd_page={
                          "autorole <role>":"Ajoute automatiquement le role aux nouveaux arrivants",
                          "set joinchannel <salon>":"Permet de définir le salon de bienvenue",
                          "renew":"Permet de supprimer et remettre un salon",
-                         "clear <nombre>":"Permet de supprimer un certain nombre de messages",
                          "set botname <nom>":"Permet de changer le nom du bot",
                          "set theme <couleur hex>":"Permet de changer la couleur du bot",
+                         "rename <pseudo> <new_name>":"Permet de renommer un utilisateur",
     },
     "Ticket":{"ticket_init":"Permet d'initialiser la création de ticket (executer dans le salon ticket)",
               "close":"Permet de fermer un ticket",
-              "rename" : "Permet de renommer un ticket",
+              "rename ticket <new_name>" : "Permet de renommer un ticket",
               "set ticketchannel <salon>" :"Permet de définir le salon de ticket",
               "set ticketcategory <category name>":" Permet de définir une catégorie de ticket",
               "add ticketform <category name>" :"Permet d'ajouter une question au formulaire de la categorie du ticket",
@@ -61,9 +64,15 @@ help_cmd_page={
             "raidlog off":"Permet de désactiver les logs de raid",
             "antilink <on/off>":"Permet d'activer/désactiver l'envoi de lien",
             "antiraid <on/off>":"Permet de kick les utilisateurs ajoutant un bot sans autorisation",
-            "set status <status>":"Permet de définir le status du bot",
             "msglog on <salon>":"Permet de définir les logs de message",
             "msglog off":"Permet de désactiver les logs de message",
+    },
+    "Informations":{"server info":"Permet d'afficher les informations du serveur",
+                    "server roles":"Permet d'afficher les roles du serveur",
+                    "server pic":"Permet d'afficher l'icône du serveur",
+                    "server banner":"Permet d'afficher la bannière du serveur",
+                    "pic <pseudo>":"Permet d'afficher la photo de profil d'un utilisateur",
+                    "banner <pseudo>":"Permet d'afficher la bannière d'un utilisateur",
     },
 
 }
@@ -271,6 +280,79 @@ async def banlist(ctx):
       await ctx.send(embed=embed)
 
 @bot.command()
+async def kick(ctx,member:discord.Member,reason=None):
+  if ctx.author.id in get_admin_list(ctx.guild):
+    await member.kick(reason=reason)
+    await ctx.send(f'{member.mention} a été **kick**')
+  else:
+    await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
+
+@bot.command()
+async def pic(ctx,member:discord.Member=None):
+    if member is None:
+       member=ctx.author
+    avatar_url = member.display_avatar.url
+    embed = discord.Embed(title=f"Photo de profil de {member.name}", color=int(config["guilds"][str(ctx.guild.id)]["theme"],16))
+    embed.set_image(url=avatar_url)
+    await ctx.send(embed=embed)
+
+@bot.command()
+async def banner(ctx,member:discord.Member=None):
+    if member is None:
+       member=ctx.author
+    user = await bot.fetch_user(member.id)
+    if user.banner:
+        banner_url = user.banner.url
+        embed = discord.Embed(
+            title=f"Bannière de {user.name}", 
+            color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+        )
+        embed.set_image(url=banner_url)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"{user.name} n'a pas de bannière définie.")
+
+@bot.command()
+async def server(ctx,arg):
+   if arg=="info":
+      embed = discord.Embed(
+          title=ctx.guild.name,
+          description=f"👑 Propriétaire : {ctx.guild.owner.mention}\n👥 Membres : {ctx.guild.member_count}\n📅 Création : {ctx.guild.created_at.strftime('%d/%m/%Y')}",
+          color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+      )
+      embed.set_thumbnail(url=ctx.guild.icon.url if ctx.guild.icon else None)
+      await ctx.send(embed=embed)
+   elif arg=="roles":
+      txt=""
+      for role in ctx.guild.roles:
+          if role.name != "@everyone":
+            txt+=f'**{role.name}**\n'
+      embed = discord.Embed(
+          title='Liste des roles',
+          description=txt,
+          color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+      )
+      await ctx.send(embed=embed)
+   elif arg=="pic":
+      icon_url = ctx.guild.icon.url if ctx.guild.icon else None
+
+      if icon_url:
+        embed = discord.Embed(title=f"Icône du serveur {ctx.guild.name}", color=int(config["guilds"][str(ctx.guild.id)]["theme"],16))
+        embed.set_image(url=icon_url)
+        await ctx.send(embed=embed)
+      else:
+        await ctx.send("Ce serveur n'a pas d'icône définie.")
+   elif arg=="banner":
+      banner_url = ctx.guild.banner.url if ctx.guild.banner else None
+
+      if banner_url:
+        embed = discord.Embed(title=f"Bannière du serveur {ctx.guild.name}", color=int(config["guilds"][str(ctx.guild.id)]["theme"],16))
+        embed.set_image(url=banner_url)
+        await ctx.send(embed=embed)
+      else:
+        await ctx.send("Ce serveur n'a pas de bannière définie.")
+
+@bot.command()
 async def lock(ctx):
     if ctx.author.id in get_admin_list(ctx.guild):
       channel=ctx.channel
@@ -475,10 +557,7 @@ async def set(ctx,param1:str,param2):
              await ctx.send(f"Le thème du serveur a été défini sur **{param2}**")
           except :
               await ctx.send("Veuillez entrer une couleur hexadécimale valide")
-      elif param1=="status":
-          await bot.change_presence(activity=discord.Game(name=param2))
-          config["guilds"][str(ctx.guild.id)]["status"]=param2
-          await ctx.send(f"Le status du bot a été défini sur **{param2}**")
+
       elif param1=="ticketimg" :
         if url_pattern.search(param2):
           config["guilds"][str(ctx.guild.id)]["ticket"]["img"]=param2
@@ -735,11 +814,7 @@ async def update_config():
 async def on_ready():
     update_config.start()
     recreate_ticket_view.start()
-    for guild in bot.guilds:
-        if "status" in config["guilds"][str(guild.id)].keys():
-          await bot.change_presence(activity=discord.Game(name=config["guilds"][str(guild.id)]["status"]))
-        else:
-          await bot.change_presence(activity=discord.Game(name="CoreBot"))
+    await bot.change_presence(activity=discord.Game(name="CoreBot"))
 @bot.command()
 async def ticket_init(ctx):
     if ctx.author.id in get_admin_list(ctx.guild):
@@ -770,10 +845,15 @@ async def close(ctx):
         await ctx.send("Cette commande ne peut être utilisé que dans un canal de ticket.")
 
 @bot.command()
-async def rename(ctx,new_name):
+async def rename(ctx,arg1,new_name):
     if ctx.author.id in get_admin_list(ctx.guild) :
-      await ctx.channel.edit(name=new_name)
-      await ctx.send(f"Le nom du ticket a été changé en **{new_name}**")
+      if arg1=="ticket":
+        await ctx.channel.edit(name=new_name)
+        await ctx.send(f"Le nom du ticket a été changé en **{new_name}**")
+      elif discord.utils.get(ctx.guild.members,id=int(arg1.strip("<@!>"))):
+        member=discord.utils.get(ctx.guild.members,id=int(arg1.strip("<@!>")))
+        await member.edit(nick=new_name)
+        await ctx.send(f"Le nom de {member.mention} a été changé en **{new_name}**")
     else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 

@@ -42,7 +42,8 @@ def savedropboxconfig():
 def loadconfig_dropbox():
     with open('config.json','r') as f:
         config=json.load(f)
-    dbx=dropbox.Dropbox(config["dropbox_token"])
+    new_token=refresh_access_token(os.getenv("refresh_TOKEN"), os.getenv("APP_KEY"), os.getenv("APP_SECRET"))
+    dbx=dropbox.Dropbox(new_token)
     dbx.files_download_to_file('config.json','/config.json')
-    
+
     return config
