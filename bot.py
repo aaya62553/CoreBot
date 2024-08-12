@@ -77,8 +77,12 @@ help_cmd_page={
 
 }
 
+def loadconfig():
+    with open('config.json','r') as f:
+        config=json.load(f)
+    return config
+config=loadconfig()
 
-config=loadconfig_dropbox()
 def save_config():
   with open("config.json","w") as f:
      json.dump(config,f,indent=4)
