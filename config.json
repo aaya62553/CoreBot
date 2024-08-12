@@ -39,19 +39,7 @@
       "antiraid": true,
       "status": "tets"
     },
-    "947901267219472426": {
-      "owner_id": 481147774004625418,
-      "admin_list": [481147774004625418],
-      "autorole": null,
-      "welcome_channel": null,
-      "antilink": false,
-      "autoreact": {},
-      "ticket": {
-        "channel": null,
-        "categories": {}
-      },
-      "logs": {}
-    },
+
     "1271419577594679318": {
       "owner_id": 481147774004625418,
       "admin_list": [
