@@ -38,3 +38,11 @@ def savedropboxconfig():
     with open('config.json','rb') as f:
         dbx.files_upload(f.read(),'/config.json',mode=dropbox.files.WriteMode.overwrite)
     print('config.json uploaded to Dropbox')
+
+def loadconfig_dropbox():
+    with open('config.json','r') as f:
+        config=json.load(f)
+    dbx=dropbox.Dropbox(config["dropbox_token"])
+    dbx.files_download_to_file('config.json','/config.json')
+    
+    return config

@@ -5,7 +5,7 @@ import asyncio
 import re
 from dotenv import load_dotenv 
 import os
-from savedropbox_config import savedropboxconfig,refresh_access_token
+from savedropbox_config import savedropboxconfig,refresh_access_token,loadconfig_dropbox
 from keep_alive import keep_alive
 import json
 load_dotenv()
@@ -14,7 +14,7 @@ load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
-intents.members=True
+intents.members=True 
 bot = commands.Bot(command_prefix="+", intents=intents,help_command=None)
 
 
@@ -34,6 +34,7 @@ help_cmd_page={
                          "unlock":"Permet de déverouiller un salon textuel",
                          "autoreact add <salon,emoji>":"Permet d'ajouter une réaction automatique à un salon",
                          "autoreact del <salon,emoji>":"Permet de retirer une réaction automatique à un salon",
+                         "list autoreact":"Permet d'afficher la liste des salons avec réactions automatiques",
                          "massiverole <role>":"Permet d'ajouter un role à tous les membres du serveur",
                          "autorole <role>":"Ajoute automatiquement le role aux nouveaux arrivants",
                          "set joinchannel <salon>":"Permet de définir le salon de bienvenue",
@@ -52,6 +53,7 @@ help_cmd_page={
               "remove ticketform <category name>":" Permet de retirer un formulaire de ticket",
               "list ticketcategory":"Permet d'afficher la liste des catégories de ticket",
               "set ticketrole <role>":"Permet de définir le role ayant accès aux tickets",
+              "set ticketimg <url de l'image>":"Permet de définir l'image du ticket",
              },
     "Logs":{"boostlog on <salon>":"Permet de définir les logs de boost",
             "boostlog off":"Permet de désactiver les logs de boost",
@@ -60,15 +62,14 @@ help_cmd_page={
             "antilink <on/off>":"Permet d'activer/désactiver l'envoi de lien",
             "antiraid <on/off>":"Permet de kick les utilisateurs ajoutant un bot sans autorisation",
             "set status <status>":"Permet de définir le status du bot",
+            "msglog on <salon>":"Permet de définir les logs de message",
+            "msglog off":"Permet de désactiver les logs de message",
     },
 
 }
 
-def load_config():
-  with open("config.json","r") as config_file:
-      return json.load(config_file)
-config=load_config()
 
+config=loadconfig_dropbox()
 def save_config():
   with open("config.json","w") as f:
      json.dump(config,f,indent=4)
@@ -372,8 +373,7 @@ async def on_message(message):
 @bot.command()
 async def autoreact(ctx,status,channel:discord.TextChannel,emoji:str):
    if ctx.author.id in get_admin_list(ctx.guild):
-      
-      # if emoji.startswith("\u"):
+      if emoji[0:2]!="<:":
           if status.lower()=="add":
             if str(channel.id) not in config["guilds"][str(ctx.guild.id)]["autoreact"].keys():
           
@@ -389,8 +389,8 @@ async def autoreact(ctx,status,channel:discord.TextChannel,emoji:str):
                     config["guilds"][str(ctx.guild.id)]["autoreact"][str(channel.id)].remove(emoji)
                     await ctx.send(f"Réaction automatique désactivée pour le salon {channel.mention} avec l'emoji {emoji}")
           save_config()
-      # else:
-      #     await ctx.send("Veuillez entrer un emoji valide")
+      else:
+          await ctx.send("Veuillez entrer un emoji valide")
    else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
@@ -479,6 +479,12 @@ async def set(ctx,param1:str,param2):
           await bot.change_presence(activity=discord.Game(name=param2))
           config["guilds"][str(ctx.guild.id)]["status"]=param2
           await ctx.send(f"Le status du bot a été défini sur **{param2}**")
+      elif param1=="ticketimg" :
+        if url_pattern.search(param2):
+          config["guilds"][str(ctx.guild.id)]["ticket"]["img"]=param2
+          await ctx.send(f"L'image du ticket a été défini sur **{param2}**")
+        else:
+          await ctx.send("Veuillez entrer une url valide (en .png, .jpg, .jpeg)")
             
       save_config()
    else:
@@ -531,6 +537,19 @@ async def list(ctx,param1:str):
               txt+=f'**{category}**\n'
           embed = discord.Embed(
             title='Liste des catégories de tickets',
+            description=txt,
+            color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+            )
+          await ctx.send(embed=embed)
+        elif param1=="autoreact":
+          autoreact=config["guilds"][str(ctx.guild.id)]["autoreact"]
+          txt=""
+          for channel in autoreact:
+              channel=discord.utils.get(ctx.guild.channels,id=int(channel))
+              if channel and len(autoreact[str(channel.id)])>0:
+                txt+=f'**{channel.mention}** : {" ".join(autoreact[str(channel.id)])}\n'
+          embed = discord.Embed(
+            title='Liste des salons avec réactions automatiques',
             description=txt,
             color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
             )
@@ -630,7 +649,7 @@ async def create_ticket_channel(interaction,category,submit=None):
             await member.send("Vous avez déjà un ticket ouvert.")
             return
         
-        if "role" in config["guilds"][str(guild.id)]["ticket"].keys():
+        if "role" in config["guilds"][str(guild.id)]["ticket"].keys() and discord.utils.get(guild.roles,id=config["guilds"][str(guild.id)]["ticket"]["role"]) is not None:
             ticket_role=discord.utils.get(guild.roles,id=config["guilds"][str(guild.id)]["ticket"]["role"])
 
             overwrites = {
@@ -652,7 +671,10 @@ async def create_ticket_channel(interaction,category,submit=None):
                                   description=description, 
                                   color=int(config["guilds"][str(guild.id)]["theme"],16)
                                   )
-            embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
+            if "img" in config["guilds"][str(guild.id)]["ticket"].keys():
+              embed.set_image(url=config["guilds"][str(guild.id)]["ticket"]["img"])
+            else:
+              embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
             await ticket_channel.send(embed=embed)
             await ticket_channel.send(f"Bonjour {member.mention}, votre ticket **{category}** a été crée.")
         else:
@@ -676,6 +698,8 @@ class TicketCategorySelect(Select):
             await interaction.response.send_modal(RecruitementFormModal(interaction,category))
         else:
             await create_ticket_channel(interaction, category)
+        await interaction.followup.edit_message(message_id=interaction.message.id, view=TicketView(interaction.guild))
+
 
 class TicketView(View):
     def __init__(self,guild,timeout=86400):
@@ -693,11 +717,14 @@ async def recreate_ticket_view():
               description='Veuillez sélectionner une catégorie pour ouvrir votre ticket dans le menu déroulant ci-dessous.',
               color=int(config["guilds"][str(guild.id)]["theme"],16)
           )
-          embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
+          if "img" in config["guilds"][str(guild.id)]["ticket"].keys():
+            embed.set_image(url=config["guilds"][str(guild.id)]["ticket"]["img"])
+          else:
+            embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
           embed.set_footer(text='CoreBot Ticket')
           await ticket_channel.send(embed=embed,view=TicketView(guild))
 
-invites_cache = {}
+
 
 @tasks.loop(hours=3)
 async def update_config():
@@ -722,7 +749,10 @@ async def ticket_init(ctx):
           description='Veuillez sélectionner une catégorie pour ouvrir votre ticket dans le menu déroulant ci-dessous.',
           color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
       )
-      embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
+      if "img" in config["guilds"][str(ctx.guild.id)]["ticket"].keys():
+        embed.set_image(url=config["guilds"][str(ctx.guild.id)]["ticket"]["img"])
+      else:
+        embed.set_image(url=r'https://4kwallpapers.com/images/walls/thumbs_3t/12504.png')
       embed.set_footer(text='CoreBot Ticket')
       await ctx.send(embed=embed, view=TicketView(ctx.guild))
     else:
@@ -742,17 +772,14 @@ async def close(ctx):
 @bot.command()
 async def rename(ctx,new_name):
     if ctx.author.id in get_admin_list(ctx.guild) :
-      ticket_categories=config["guilds"][str(ctx.guild.id)]["ticket"]["categories"].keys()
-      if any(ctx.channel.name.startswith(prefix.lower()) for prefix in ticket_categories):
-        await ctx.channel.edit(name=new_name)
-        await ctx.send(f"Le nom du ticket a été changé en **{new_name}**")
-      else:
-        await ctx.send("Cette commande ne peut être utilisé que dans un canal de ticket.")
+      await ctx.channel.edit(name=new_name)
+      await ctx.send(f"Le nom du ticket a été changé en **{new_name}**")
     else:
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
+
 @bot.command()
-async def boostlog(ctx,arg1,channel:discord.TextChannel):
+async def boostlog(ctx,arg1,channel:discord.TextChannel=None):
    if ctx.author.id in get_admin_list(ctx.guild):
       if arg1=="on":
         config["guilds"][str(ctx.guild.id)]["logs"]["boostlog"]=channel.id
@@ -765,7 +792,7 @@ async def boostlog(ctx,arg1,channel:discord.TextChannel):
       await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
 
 @bot.command()
-async def raidlog(ctx,arg1,channel:discord.TextChannel):
+async def raidlog(ctx,arg1,channel:discord.TextChannel=None):
    if ctx.author.id in get_admin_list(ctx.guild):
       if arg1=="on":
         config["guilds"][str(ctx.guild.id)]["logs"]["raidlog"]=channel.id
@@ -789,6 +816,65 @@ async def antiraid(ctx,arg1):
         save_config()
     else:
         await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
+
+@bot.command()
+async def msglog(ctx,arg1,channel:discord.TextChannel=None):
+   if ctx.author.id in get_admin_list(ctx.guild):
+      if arg1=="on":
+        config["guilds"][str(ctx.guild.id)]["logs"]["msglog"]=channel.id
+        await ctx.send(f"Les logs de message ont été définis sur {channel.mention}")
+      elif arg1=="off":
+        config["guilds"][str(ctx.guild.id)]["logs"].pop("msglog")
+        await ctx.send("Les logs de message ont été désactivés")
+      save_config()
+   else:
+      await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
+
+@bot.event
+async def on_message_delete(message):
+    if "msglog" in config["guilds"][str(message.guild.id)]["logs"].keys():
+      embed=discord.Embed(title=f"{message.author.name} Deleted a message", 
+      description=message.content if message.content else "Message is empty or too long", 
+      color=int(config["guilds"][str(message.guild.id)]["theme"],16)
+      )
+      channel=discord.utils.get(message.guild.channels, id=config["guilds"][str(message.guild.id)]["logs"]["msglog"])
+      await channel.send(embed=embed)
+
+
+@bot.command()
+async def settings(ctx):
+   if ctx.author.id in get_admin_list(ctx.guild):
+      proprietaire=discord.utils.get(ctx.guild.members,id=config["guilds"][str(ctx.guild.id)]["owner_id"])
+      txt=f"**Propriétaire du bot :** {proprietaire.mention}\n\n"
+      join_role=discord.utils.get(ctx.guild.roles,id=config["guilds"][str(ctx.guild.id)]["autorole"])
+      txt+=f"**Role d'arrivée :** {join_role.mention}\n\n"
+      welcome_channel=discord.utils.get(ctx.guild.channels,id=config["guilds"][str(ctx.guild.id)]["welcome_channel"])
+      if welcome_channel:
+        txt+=f"**Salon de bienvenue :** {welcome_channel.mention}\n\n"
+      if "channel" in config["guilds"][str(ctx.guild.id)]["ticket"].keys():
+        ticket_channel=discord.utils.get(ctx.guild.channels,id=config["guilds"][str(ctx.guild.id)]["ticket"]["channel"])
+        if ticket_channel:
+          txt+=f"**Salon de ticket :** {ticket_channel.mention}\n\n"
+      if "role" in config["guilds"][str(ctx.guild.id)]["ticket"].keys():
+        ticket_role=discord.utils.get(ctx.guild.roles,id=config["guilds"][str(ctx.guild.id)]["ticket"]["role"])
+        if ticket_role:
+          txt+=f"**Role de ticket :** {ticket_role.mention}\n\n"
+      antilink=config["guilds"][str(ctx.guild.id)]["antilink"]
+      txt+=f"**Antilink :** {antilink}\n\n"
+      if "antiraid" in config["guilds"][str(ctx.guild.id)].keys():
+        antiraid=config["guilds"][str(ctx.guild.id)]["antiraid"]
+        txt+=f"**Antiraid :** {antiraid}\n\n"
+      embed=discord.Embed(
+          title=f'Paramètres du serveur {ctx.guild.name}',
+          description=txt,
+          color=int(config["guilds"][str(ctx.guild.id)]["theme"],16)
+      )
+      embed.set_footer(text='CoreBot')
+      await ctx.send(embed=embed)
+   else:
+      await ctx.send('Vous n\'avez pas les permissions nécessaires pour effectuer cette commande')
+
+
 
 
 keep_alive()

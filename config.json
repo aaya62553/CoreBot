@@ -1,133 +1,162 @@
 {
-    "guilds": {
-        "994268877011832893": {
-            "owner_id": 481147774004625418,
-            "admin_list": [
-                481147774004625418,
-                1271132555957239913,
-                852699091040337991
-            ],
-            "autorole": 1271374832574922752,
-            "welcome_channel": 1271421365051850784,
-            "antilink": true,
-            "autoreact": {
-                "1271421365051850784": [],
-                "1271512970089861143": [
-                    "\ud83e\uddf7"
-                ]
-            },
-            "ticket": {
-                "channel": 1271512970089861143,
-                "categories": {
-                    "Ticket": {
-                        "description": "Cliquez ici pour ouvrir un nouveau ticket",
-                        "emoji": "",
-                        "form": {
-                            "test": "test"
-                        }
-                    },
-                    "Test": {
-                        "description": "Cliquez ici pour ouvrir un ticket",
-                        "emoji": ""
-                    }
-                },
-                "role": 1271410157234163823
-            },
-            "logs": {
-                "raidlog": 1271421365051850784,
-                "boostlog": 1271421365051850784,
-                "msglog": 1271424938934538251
-            },
-            "botname": "BOT",
-            "theme": "fffff",
-            "antiraid": true,
-            "status": "tets"
+  "guilds": {
+    "994268877011832893": {
+      "owner_id": 481147774004625418,
+      "admin_list": [
+        481147774004625418, 1271132555957239913, 852699091040337991
+      ],
+      "autorole": 1271374832574922752,
+      "welcome_channel": 1271421365051850784,
+      "antilink": true,
+      "autoreact": {
+        "1271421365051850784": [],
+        "1271512970089861143": ["\ud83e\uddf7"]
+      },
+      "ticket": {
+        "channel": 1271512970089861143,
+        "categories": {
+          "Ticket": {
+            "description": "Cliquez ici pour ouvrir un nouveau ticket",
+            "emoji": "",
+            "form": {
+              "test": "test"
+            }
+          },
+          "Test": {
+            "description": "Cliquez ici pour ouvrir un ticket",
+            "emoji": ""
+          }
         },
-        "947901267219472426": {
-            "owner_id": 481147774004625418,
-            "admin_list": [
-                481147774004625418
-            ],
-            "autorole": null,
-            "welcome_channel": null,
-            "antilink": false,
-            "autoreact": {},
-            "ticket": {
-                "channel": null,
-                "categories": {}
-            },
-            "logs": {}
-        },
-        "1271419577594679318": {
-            "owner_id": 481147774004625418,
-            "admin_list": [
-                481147774004625418,
-                1271132555957239913,
-                852699091040337991
-            ],
-            "autorole": 1271419577624166496,
-            "welcome_channel": 1271419578806964336,
-            "antilink": true,
-            "autoreact": {
-                "1271857028305915904": [
-                    "\u2705",
-                    "\u274c"
-                ]
-            },
-            "ticket": {
-                "channel": 1271419578609696799,
-                "categories": {
-                    "Renseignement": {
-                        "description": "Cliquez ici pour ouvrir un ticket de renseignement",
-                        "emoji": "\ud83d\udd0e",
-                        "form": {
-                            "\ud83d\udd0ePosez votre question ici !": "Posez votre question ici..."
-                        }
-                    },
-                    "Achat": {
-                        "description": "Cliquez ici pour ouvrir une demande d'achat",
-                        "emoji": "\ud83d\udcb8"
-                    }
-                },
-                "role": 1271847090858758176
-            },
-            "logs": {
-                "raidlog": 1271419578290798634,
-                "boostlog": 1271419578290798634
-            },
-            "theme": "0071ff"
-        },
-        "1219116198080417792": {
-            "owner_id": 1200501386144649392,
-            "admin_list": [
-                481147774004625418,
-                1200501386144649392
-            ],
-            "autorole": null,
-            "welcome_channel": null,
-            "antilink": false,
-            "autoreact": {},
-            "ticket": {
-                "channel": 1264560524381786215,
-                "categories": {
-                    "Giveaway": {
-                        "description": "Cliquez ici pour ouvrir une demande de giveaway",
-                        "emoji": "\ud83c\udf81"
-                    },
-                    "Recrutement": {
-                        "description": "Cliquez ici pour ouvrir une demande de recrutement",
-                        "emoji": "\u2694\ufe0f"
-                    },
-                    "Autre": {
-                        "description": "Cliquez ici pour ouvrir un ticket normal",
-                        "emoji": "\ud83d\udcc2"
-                    }
-                },
-                "role": 1219780677558472734
-            },
-            "logs": {},
-            "theme": "ff0000"
-        }
+        "role": 1271410157234163823
+      },
+      "logs": {
+        "raidlog": 1271421365051850784,
+        "boostlog": 1271421365051850784,
+        "msglog": 1271424938934538251
+      },
+      "botname": "BOT",
+      "theme": "fffff",
+      "antiraid": true,
+      "status": "tets"
     },
-    "dropbox_token": "sl.B6wsHtreXdSMPvmSZApAvU-8nag7qQ6etUK6G5AL3PPWMgBV_vCkQFpOEWGmSs-AD3wECe_EjT_UfVdz0OpqlTitA11RFdIPxmJlwBfRR0_4z6O03Nq_e5bQqaWu-wQT-ibt0MP6zBnk"
+    "947901267219472426": {
+      "owner_id": 481147774004625418,
+      "admin_list": [481147774004625418],
+      "autorole": null,
+      "welcome_channel": null,
+      "antilink": false,
+      "autoreact": {},
+      "ticket": {
+        "channel": null,
+        "categories": {}
+      },
+      "logs": {}
+    },
+    "1271419577594679318": {
+      "owner_id": 481147774004625418,
+      "admin_list": [
+        481147774004625418, 1271132555957239913, 852699091040337991
+      ],
+      "autorole": 1271419577624166496,
+      "welcome_channel": 1271419578806964336,
+      "antilink": true,
+      "autoreact": {
+        "1271857028305915904": ["\u2705", "\u274c"]
+      },
+      "ticket": {
+        "channel": 1271419578609696799,
+        "categories": {
+          "Renseignement": {
+            "description": "Cliquez ici pour ouvrir un ticket de renseignement",
+            "emoji": "\ud83d\udd0e",
+            "form": {
+              "\ud83d\udd0ePosez votre question ici !": "Posez votre question ici..."
+            }
+          },
+          "Achat": {
+            "description": "Cliquez ici pour ouvrir une demande d'achat",
+            "emoji": "\ud83d\udcb8"
+          }
+        },
+        "role": 1272478572682022984
+      },
+      "logs": {
+        "raidlog": 1271419578290798634,
+        "boostlog": 1271419578290798634
+      },
+      "theme": "0071ff"
+    },
+    "1219116198080417792": {
+      "owner_id": 1200501386144649392,
+      "admin_list": [481147774004625418, 1200501386144649392],
+      "autorole": null,
+      "welcome_channel": null,
+      "antilink": false,
+      "autoreact": {},
+      "ticket": {
+        "channel": 1264560524381786215,
+        "categories": {
+          "Giveaway": {
+            "description": "Cliquez ici pour ouvrir une demande de giveaway",
+            "emoji": "\ud83c\udf81"
+          },
+          "Recrutement": {
+            "description": "Cliquez ici pour ouvrir une demande de recrutement",
+            "emoji": "\u2694\ufe0f"
+          },
+          "Autre": {
+            "description": "Cliquez ici pour ouvrir un ticket normal",
+            "emoji": "\ud83d\udcc2"
+          }
+        },
+        "role": 1219780677558472734
+      },
+      "logs": {},
+      "theme": "ff0000"
+    },
+    "1251646476480675871": {
+      "owner_id": 852699091040337991,
+      "admin_list": [
+        481147774004625418, 852699091040337991, 1040763496612241448,
+        737387956028964875, 725051812339515412, 1268686750839210015,
+        587402773117796352, 998565472389845072
+      ],
+      "autorole": 1251652118205567127,
+      "welcome_channel": 1251647709962829907,
+      "antilink": false,
+      "autoreact": {
+        "1269377586392338452": ["\u2705"],
+        "1270699935850823816": ["\ud83d\uddff"]
+      },
+      "ticket": {
+        "channel": 1270813725246357675,
+        "categories": {
+          "Giveaway": {
+            "description": "Cliquez ici pour ouvrir une demande de giveaway",
+            "emoji": "\ud83c\udf89"
+          },
+          "Autre": {
+            "description": "Cliquez ici pour ouvrir un ticket",
+            "emoji": "\ud83d\udcdd"
+          },
+          "Recrutement": {
+            "description": "Cliquez ici pour ouvrir une demande de recrutement",
+            "emoji": "\u2694\ufe0f",
+            "form": {
+              "Pseudo et \u00e2ge": "Entrez votre pseudo et votre \u00e2ge...",
+              "Anciennes factions": "S\u00e9parer les factions par une virgule",
+              "Heures de jeu": "Ex : Lundi 18h-22h, Mardi 17h-20h...",
+              "Niveau de jeu": "Ex : Koth 8/10, Cassage 5/10 ...",
+              "Pourquoi cette faction ?": "Raconte ce que tu veux..."
+            }
+          }
+        },
+        "role": 1251647653247193098
+      },
+      "logs": {},
+      "theme": "ff0000",
+      "botname": "Sigma"
+    }
+  },
+  "dropbox_token": "sl.B63kOkKn-WFERyay3m70CNxfHYLqMKziB4twMQ4Wm-LdT7VOMheS3JUUnkD_X1wUveHpAmCsO1nPD31OYTRIl7ndqD82GAZIPms1yMge4BAXCJWd65IH_SKCHckcRYuBaWQuMMpUt_sY"
 }
